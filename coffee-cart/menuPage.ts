@@ -1,14 +1,14 @@
 import { Page, Locator } from '@playwright/test';
 
-export class menuPage{
+export class MenuPage{
     readonly promoPopup: Locator;
     readonly acceptPromo: Locator;
     readonly declinePromo: Locator;
 
     constructor(private page: Page){
-        this.promoPopup = page.getByRole('button', {name:'Yes, of course!'})
-        this.acceptPromo = page.getByRole('button', {name:'Yes, of course!'})
-        this.declinePromo = page.getByRole('button', {name: 'Nah, I\'ll skip.'})
+        this.promoPopup = page.getByRole('button', {name:'Yes, of course!'});
+        this.acceptPromo = page.getByRole('button', {name:'Yes, of course!'});
+        this.declinePromo = page.getByRole('button', {name: 'Nah, I\'ll skip.'});
     }
 
     async goto(){
@@ -17,7 +17,7 @@ export class menuPage{
 
     async addCoffee(testId: string) {
         await this.page.getByTestId(testId).click();
-      }
+    }
 
     async yesPromo(){
         await this.acceptPromo.click();
@@ -28,4 +28,24 @@ export class menuPage{
     async checkout(){
         await this.page.getByTestId('checkout').click();
     }
+
+    coffeeHeading(name: string) {
+        return this.page.getByRole('heading', { name });
+      }
+      
+    get chineseText() {
+        return this.page.getByText(/[\u4e00-\u9fff]/);
+    }
+
+    async translateCoffee(name: string) {
+        await this.page.getByRole('heading', { name }).dblclick();
+    }
+
+    async addToCartOption(testId: string){
+        await this.page.getByTestId(testId).click({button: 'right'})
+    }
+
+    addToCartDialog(testId: string) {
+        return this.page.getByText(`Add ${testId.replace(/_/g, ' ')} to the cart`);
+      }
 }
